@@ -1,4 +1,6 @@
 
 ipython
+scipy
 textplot
 click
+clint
