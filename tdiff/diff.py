@@ -7,7 +7,7 @@ from scipy.misc import comb
 from clint.textui.progress import bar
 
 
-class Matrix:
+class Diff:
 
 
     @classmethod
@@ -47,20 +47,21 @@ class Matrix:
 
         Args:
             n (int): Consider top N words (by frequency) from each text.
+
+        Returns:
+            list: Tuples of (t1 term, t2 term, weight).
         """
 
         mft1 = self.text1.most_frequent_terms(n)
         mft2 = self.text2.most_frequent_terms(n)
 
-        terms = set.union(mft1, mft2)
-        pairs = combinations(terms, 2)
-        count = comb(len(terms), 2)
-
+        # For each term in text 1.
         links = []
         for t1 in mft1:
 
             st1 = self.text1.unstem(t1)
 
+            # Score against each term in text 2.
             scores = []
             for t2 in mft2:
 
@@ -72,10 +73,11 @@ class Matrix:
                 score = 1-distance.braycurtis(t1_kde, t2_kde)
                 scores.append((st2, score))
 
+            # Register the closest match.
             scores = sorted(scores, key=lambda x: x[1], reverse=True)
+            links.append((st1, scores[0][0], scores[0][1]))
 
-            if st1 != scores[0][0]:
-                links.append((st1, scores[0][0], scores[0][1]))
-
+        # Sort strongest -> weakest.
         links = sorted(links, key=lambda x: x[2], reverse=True)
+
         return links
