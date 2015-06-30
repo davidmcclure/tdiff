@@ -1,10 +1,10 @@
 
 
+import networkx as nx
+
 from textplot.text import Text
-from itertools import combinations
-from scipy.spatial import distance
-from scipy.misc import comb
 from clint.textui.progress import bar
+from scipy.spatial import distance
 
 
 class Diff:
@@ -40,13 +40,13 @@ class Diff:
         self.text2 = text2
 
 
-    def compare(self, n, **kwargs):
+    def pairs(self, n, **kwargs):
 
         """
         Index KDE similarities between top N types in each text.
 
         Args:
-            n (int): Consider top N words (by frequency) from each text.
+            n (int): Consider top N words.
 
         Returns:
             list: Tuples of (t1 term, t2 term, weight).
@@ -81,3 +81,17 @@ class Diff:
         links = sorted(links, key=lambda x: x[2], reverse=True)
 
         return links
+
+
+    def graph(self, term_depth=500, skim_depth=10, **kwargs):
+
+        """
+        For each term in t1, connect with the top N more similar terms in t2;
+        and, vice versa.
+
+        Args:
+            term_depth (int): Number of words to consider in each text.
+            skim_depth (int): Nearest-neighbors per term.
+        """
+
+        pass

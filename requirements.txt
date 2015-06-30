@@ -1,6 +1,7 @@
 
 ipython
 scipy
+networkx
 textplot
 click
 clint
