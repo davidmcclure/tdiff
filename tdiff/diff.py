@@ -40,13 +40,13 @@ class Diff:
         self.text2 = text2
 
 
-    def pairs(self, n, **kwargs):
+    def kde_nn(self, n=500, **kwargs):
 
         """
-        Index KDE similarities between top N types in each text.
+        Match each term in t1 with the term in t2 with the most similar KDE.
 
         Args:
-            n (int): Consider top N words.
+            n (int): Consider N most-frequent words.
 
         Returns:
             list: Tuples of (t1 term, t2 term, weight).
@@ -81,17 +81,3 @@ class Diff:
         links = sorted(links, key=lambda x: x[2], reverse=True)
 
         return links
-
-
-    def graph(self, term_depth=500, skim_depth=10, **kwargs):
-
-        """
-        For each term in t1, connect with the top N more similar terms in t2;
-        and, vice versa.
-
-        Args:
-            term_depth (int): Number of words to consider in each text.
-            skim_depth (int): Nearest-neighbors per term.
-        """
-
-        pass
