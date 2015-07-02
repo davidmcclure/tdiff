@@ -88,14 +88,14 @@ class Diff:
         return links
 
 
-    def nn_edit_distances(self, depth=10, **kwargs):
+    def topn_edit_distances(self, n=10, **kwargs):
 
         """
         For each term in text 1, find the term in text 2 with the most similar
         set of nearest-neighbors, in terms of path distance.
 
         Args:
-            depth (int): The number of neighbors to consider.
+            n (int): The number of neighbors to consider.
 
         Returns:
             list: Tuples of (t1 term, t2 term, distance)
@@ -104,7 +104,7 @@ class Diff:
         pass
 
 
-    def topn_digraph(self, depth=5, **kwargs):
+    def topn_digraph(self, n=5, **kwargs):
 
         """
         For each term in text 1, find the N most similar terms in text 2 and
@@ -112,7 +112,7 @@ class Diff:
         in the opposite direction, linking text 2 "back" onto text 1.
 
         Args:
-            depth (int): The number of neighbors to consider.
+            n (int): The number of neighbors to consider.
 
         Returns: nx.DiGraph
         """

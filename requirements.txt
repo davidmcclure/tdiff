@@ -5,3 +5,4 @@ networkx
 textplot
 click
 clint
+editdistance
