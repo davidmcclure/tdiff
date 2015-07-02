@@ -40,14 +40,15 @@ class Diff:
         self.text2 = text2
 
 
-    def kde_nn(self, n=500, show_matches=False, **kwargs):
+    def kde_best_match(self, n=500, show_matches=False, **kwargs):
 
         """
-        Match each term in t1 with the term in t2 with the most similar KDE.
+        For each term in text 1, find the term in text 2 with the most similar
+        pattern of distribution.
 
         Args:
             n (int): Consider N most-frequent words.
-            show_matches (bool): Show A -> A matches.
+            show_matches (bool): Show identity (A -> A) matches.
 
         Returns:
             list: Tuples of (t1 term, t2 term, weight).
@@ -85,3 +86,35 @@ class Diff:
         links = sorted(links, key=lambda x: x[2], reverse=True)
 
         return links
+
+
+    def nn_edit_distances(self, depth=10, **kwargs):
+
+        """
+        For each term in text 1, find the term in text 2 with the most similar
+        set of nearest-neighbors, in terms of path distance.
+
+        Args:
+            depth (int): The number of neighbors to consider.
+
+        Returns:
+            list: Tuples of (t1 term, t2 term, distance)
+        """
+
+        pass
+
+
+    def topn_digraph(self, depth=5, **kwargs):
+
+        """
+        For each term in text 1, find the N most similar terms in text 2 and
+        register the connections as edges in a digraph. Then, do the same thing
+        in the opposite direction, linking text 2 "back" onto text 1.
+
+        Args:
+            depth (int): The number of neighbors to consider.
+
+        Returns: nx.DiGraph
+        """
+
+        pass
