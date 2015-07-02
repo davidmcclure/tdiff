@@ -40,13 +40,14 @@ class Diff:
         self.text2 = text2
 
 
-    def kde_nn(self, n=500, **kwargs):
+    def kde_nn(self, n=500, show_matches=False, **kwargs):
 
         """
         Match each term in t1 with the term in t2 with the most similar KDE.
 
         Args:
             n (int): Consider N most-frequent words.
+            show_matches (bool): Show A -> A matches.
 
         Returns:
             list: Tuples of (t1 term, t2 term, weight).
@@ -59,23 +60,26 @@ class Diff:
         links = []
         for t1 in mft1:
 
-            st1 = self.text1.unstem(t1)
-
             # Score against each term in text 2.
             scores = []
             for t2 in mft2:
-
-                st2 = self.text2.unstem(t2)
 
                 t1_kde = self.text1.kde(t1, **kwargs)
                 t2_kde = self.text2.kde(t2, **kwargs)
 
                 score = 1-distance.braycurtis(t1_kde, t2_kde)
-                scores.append((st2, score))
+                scores.append((t2, score))
 
-            # Register the closest match.
+            # Get the nearest neighbor.
             scores = sorted(scores, key=lambda x: x[1], reverse=True)
-            links.append((st1, scores[0][0], scores[0][1]))
+            t2 = scores[0][0]
+
+            if show_matches or t1 != t2:
+                links.append((
+                    self.text1.unstem(t1),
+                    self.text2.unstem(t2),
+                    scores[0][1]
+                ))
 
         # Sort strongest -> weakest.
         links = sorted(links, key=lambda x: x[2], reverse=True)
