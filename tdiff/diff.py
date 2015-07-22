@@ -3,6 +3,7 @@
 import networkx as nx
 
 from textplot.text import Text
+from textplot.helpers import build_graph
 from clint.textui.progress import bar
 from scipy.spatial import distance
 
@@ -104,7 +105,7 @@ class Diff:
         pass
 
 
-    def topn_digraph(self, n=5, **kwargs):
+    def topn_digraph(self, term_depth=500, skim_depth=5, **kwargs):
 
         """
         For each term in text 1, find the N most similar terms in text 2 and
