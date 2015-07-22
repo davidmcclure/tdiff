@@ -2,10 +2,10 @@
 
 import networkx as nx
 
-from textplot.text import Text
-from textplot.helpers import build_graph
 from clint.textui.progress import bar
 from scipy.spatial import distance
+from textplot.helpers import build_graph
+from tdiff.text import Text
 
 
 class Diff:
@@ -89,7 +89,7 @@ class Diff:
         return links
 
 
-    def topn_edit_distances(self, n=10, **kwargs):
+    def topn_edit_distances(self, term_depth=500, n=10, **kwargs):
 
         """
         For each term in text 1, find the term in text 2 with the most similar
@@ -102,7 +102,15 @@ class Diff:
             list: Tuples of (t1 term, t2 term, distance)
         """
 
-        pass
+        # Build graphs.
+        g1 = self.text1.build_graph(term_depth=term_depth, **kwargs)
+        g2 = self.text1.build_graph(term_depth=term_depth, **kwargs)
+
+        # Get weighted lengths between all pairs.
+        dij1 = nx.all_pairs_dijkstra_path_length(g1.graph, cutoff=n)
+        dij2 = nx.all_pairs_dijkstra_path_length(g1.graph, cutoff=n)
+
+        # TODO
 
 
     def topn_digraph(self, term_depth=500, skim_depth=5, **kwargs):
