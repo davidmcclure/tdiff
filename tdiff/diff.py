@@ -134,7 +134,7 @@ class Diff:
             links.append((s1, winner[0], winner[1]))
 
         # Sort strongest -> weakest.
-        links = sorted(links, key=lambda x: x[2], reverse=True)
+        links = sorted(links, key=lambda x: x[2])
 
         return links
 
