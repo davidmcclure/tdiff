@@ -6,6 +6,7 @@ from clint.textui.progress import bar
 from scipy.spatial import distance
 from textplot.helpers import build_graph
 from tdiff.text import Text
+from tdiff.utils import dijkstra
 
 
 class Diff:
@@ -106,11 +107,9 @@ class Diff:
         g1 = self.text1.build_graph(term_depth=term_depth, **kwargs)
         g2 = self.text1.build_graph(term_depth=term_depth, **kwargs)
 
-        # Get weighted lengths between all pairs.
-        dij1 = nx.all_pairs_dijkstra_path_length(g1.graph, cutoff=n)
-        dij2 = nx.all_pairs_dijkstra_path_length(g1.graph, cutoff=n)
-
-        # TODO
+        # Get lengths between all pairs.
+        dij1 = dijkstra(g1.graph, cutoff=n)
+        dij2 = dijkstra(g2.graph, cutoff=n)
 
 
     def topn_digraph(self, term_depth=500, skim_depth=5, **kwargs):
