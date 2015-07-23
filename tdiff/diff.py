@@ -108,8 +108,10 @@ class Diff:
         g2 = self.text1.build_graph(term_depth=term_depth, **kwargs)
 
         # Get lengths between all pairs.
-        dij1 = dijkstra(g1.graph, cutoff=n)
-        dij2 = dijkstra(g2.graph, cutoff=n)
+        dj1 = dijkstra(g1.graph, cutoff=n)
+        dj2 = dijkstra(g2.graph, cutoff=n)
+
+        # TODO
 
 
     def topn_digraph(self, term_depth=500, skim_depth=5, **kwargs):

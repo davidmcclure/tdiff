@@ -2,6 +2,9 @@
 
 import networkx as nx
 
+from collections import OrderedDict
+from textplot.utils import sort_dict
+
 
 def dijkstra(graph, cutoff):
 
@@ -13,29 +16,14 @@ def dijkstra(graph, cutoff):
         cutoff (int)
 
     Returns:
-        A dictionary that maps node -> neighbors, sorted ascending. Eg:
-        {
-            'source1': [
-                ('target1', 0.01),
-                ('target2', 0.02),
-                ...
-            ],
-            'source2': [
-                ('target1', 0.01),
-                ('target2', 0.02),
-                ...
-            ],
-        }
+        dict: A map of node (str) -> neighbors (OrderedDict).
     """
 
-    # Get the pairwise path lenghts.
-    dj = nx.all_pairs_dijkstra_path_length(graph, cutoff)
+    # Get source -> target distances.
+    distances = nx.all_pairs_dijkstra_path_length(graph, cutoff)
 
-    distances = {}
-    for source, targets in dj.items():
-
-        # Sort targets from near -> distant.
-        ordered = sorted(list(targets.items()), key=lambda x: x[1])
-        distances[source] = ordered
+    # Order the targets by distance.
+    for source, targets in distances.items():
+        distances[source] = sort_dict(targets, desc=False)
 
     return distances
