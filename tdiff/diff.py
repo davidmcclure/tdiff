@@ -1,10 +1,13 @@
 
 
 import networkx as nx
+import editdistance
 
+from collections import OrderedDict
 from clint.textui.progress import bar
 from scipy.spatial import distance
 from textplot.helpers import build_graph
+from textplot.utils import sort_dict
 from tdiff.text import Text
 from tdiff.utils import dijkstra
 
@@ -105,13 +108,35 @@ class Diff:
 
         # Build graphs.
         g1 = self.text1.build_graph(term_depth=term_depth, **kwargs)
-        g2 = self.text1.build_graph(term_depth=term_depth, **kwargs)
+        g2 = self.text2.build_graph(term_depth=term_depth, **kwargs)
 
         # Get lengths between all pairs.
         dj1 = dijkstra(g1.graph, cutoff=n)
         dj2 = dijkstra(g2.graph, cutoff=n)
 
-        # TODO
+        # For each term in text 1.
+        links = []
+        for s1, t1 in bar(dj1.items()):
+
+            # Score against each term in text 2.
+            scores = OrderedDict()
+            for s2, t2 in dj2.items():
+
+                nn1 = list(t1.keys())[:n]
+                nn2 = list(t2.keys())[:n]
+                scores[s2] = editdistance.eval(nn1, nn2)
+
+            # Get the closest neighbor.
+            scores = sort_dict(scores, desc=False)
+            winner = list(scores.items())[0]
+
+            # Register the match.
+            links.append((s1, winner[0], winner[1]))
+
+        # Sort strongest -> weakest.
+        links = sorted(links, key=lambda x: x[2], reverse=True)
+
+        return links
 
 
     def topn_digraph(self, term_depth=500, skim_depth=5, **kwargs):
